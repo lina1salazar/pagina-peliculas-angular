@@ -1,0 +1,20 @@
+<div class="row">
+  <ng-container *ngFor="let pelicula of peliculas">
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+      <article>
+        <a [routerLink]="['/detalle', pelicula.slug]" class="text-decoration-none text-reset">
+          <div class="position-relative mb-2">
+            <img [src]="'assets/img/posters/' + pelicula.slug + '.webp'" [alt]="pelicula.nombre" class="w-100" />
+            <span class="año position-absolute bottom-0 end-0 translate-middle badge rounded-pill text-bg-primary">
+              {{ pelicula.anio }}
+            </span>
+          </div>
+          <h5>{{ pelicula.nombre }}</h5>
+          <p>
+            <strong>Géneros: </strong><span class="generos">{{ pelicula.generos.join(', ') }}</span>
+          </p>
+        </a>
+      </article>
+    </div>
+  </ng-container>
+</div>
