@@ -1,0 +1,21 @@
+<section class="container peliculas-container">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="m-0">Otras películas</h2>
+  </div>
+  <div class="row">
+    <div *ngFor="let pelicula of peliculasOtras" class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+      <article>
+        <a [href]="'/detalle/' + pelicula.slug" class="text-decoration-none text-reset">
+          <div class="position-relative mb-2">
+            <img [src]="'assets/img/posters/' + pelicula.slug + '.webp'" [alt]="pelicula.nombre" class="w-100" />
+            <span class="año position-absolute bottom-0 end-0 translate-middle badge rounded-pill text-bg-primary">
+              {{ pelicula.anio }}
+            </span>
+          </div>
+          <h5>{{ pelicula.nombre }}</h5>
+          <p><strong>Géneros:</strong> {{ pelicula.generos.join(', ') }}</p>
+        </a>
+      </article>
+    </div>
+  </div>
+</section>

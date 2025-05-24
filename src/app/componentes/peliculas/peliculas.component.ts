@@ -3,6 +3,8 @@ import { PeliculasService, Pelicula } from '../../servicios/peliculas.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-peliculas',
@@ -18,7 +20,7 @@ export class PeliculasComponent implements OnInit {
   anios: number[] = [];
   filtroBusqueda: string = '';
 
-  constructor(private peliculasService: PeliculasService) {}
+  constructor(private peliculasService: PeliculasService,private router: Router) {}
 
   ngOnInit(): void {
     this.peliculasService.getPeliculas().subscribe(peliculas => {
@@ -26,7 +28,12 @@ export class PeliculasComponent implements OnInit {
       this.generos = this.obtenerGenerosUnicos(peliculas);
       this.anios = this.obtenerAniosUnicos(peliculas);
     });
-  }
+   this.router.events.pipe(
+    filter(event => event instanceof NavigationEnd)
+  ).subscribe(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
 
 get peliculasFiltradas(): Pelicula[] {
   return this.peliculas.filter(pelicula => {
