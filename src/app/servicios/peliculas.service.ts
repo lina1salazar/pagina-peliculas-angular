@@ -218,7 +218,28 @@ export class PeliculasService {
     actores: ['Jack Black', 'Jason Momoa', 'Sebastian Hansen'],
     sinopsis: 'Un portal desconocido atrae a cuatro jóvenes hacia el Supramundo, un reino cúbico y mágico que toma forma a partir de la imaginación. Su única esperanza de regresar es dominar un terreno cambiante y confiar en la ayuda de un artesano inesperado llamado Steve.',
     generos: ['Comedia', 'Aventura']
+  },
+   {
+    slug: 'the-amateur',
+    nombre: 'The Amateur',
+    anio: 2025,
+    puntuacion: 6.7,
+    duracion: 123,
+    actores: ['Rami Malek','Rachel Brosnahan', 'Jon Bernthal'],
+    sinopsis: 'Charlie Heller es un brillante decodificador de la CIA cuyo mundo se derrumba cuando su esposa muere en un atentado terrorista en Londres.',
+    generos: ['Drama', 'Thiller','Acción','Suspenso']
+  },
+    {
+    slug: 'los-pecadores',
+    nombre: 'Los Pecadores',
+    anio: 2025,
+    puntuacion: 8.2,
+    duracion: 138,
+    actores: ['Miles Caton','Saul Williams', 'Andrene Ward-Hammond'],
+    sinopsis: 'Tratando de descubrir sus problemáticas vidas detrás, los hermanos gemelos regresan a su ciudad natal para comenzar de nuevo, solo para descubrir que un mal aún mayor los espera para darles la bienvenida nuevamente.',
+    generos: ['Aventura', 'Horror']
   }
+
 ];
 
   constructor() { }
