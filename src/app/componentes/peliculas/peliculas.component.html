@@ -1,20 +1,42 @@
-<div class="row">
-  <ng-container *ngFor="let pelicula of peliculas">
-    <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
-      <article>
-        <a [routerLink]="['/detalle', pelicula.slug]" class="text-decoration-none text-reset">
-          <div class="position-relative mb-2">
-            <img [src]="'assets/img/posters/' + pelicula.slug + '.webp'" [alt]="pelicula.nombre" class="w-100" />
-            <span class="año position-absolute bottom-0 end-0 translate-middle badge rounded-pill text-bg-primary">
-              {{ pelicula.anio }}
-            </span>
-          </div>
-          <h5>{{ pelicula.nombre }}</h5>
-          <p>
-            <strong>Géneros: </strong><span class="generos">{{ pelicula.generos.join(', ') }}</span>
-          </p>
-        </a>
-      </article>
+<section class="container peliculas-container">
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+    <h2 class="m-0 mb-2 me-3">Todas las películas</h2>
+    <div class="d-flex gap-3 flex-wrap">
+      <div>
+        <label for="genero">Género</label>
+        <select id="genero" class="form-select form-select-sm" [(ngModel)]="filtroGenero">
+          <option value="">Todos</option>
+          <option *ngFor="let genero of generos" [value]="genero">{{ genero }}</option>
+        </select>
+      </div>
+      <div>
+        <label for="anio">Año</label>
+        <select id="anio" class="form-select form-select-sm" [(ngModel)]="filtroAnio">
+          <option value="">Todos</option>
+          <option *ngFor="let anio of anios" [value]="anio">{{ anio }}</option>
+        </select>
+      </div>
     </div>
-  </ng-container>
-</div>
+  </div>
+
+  <div class="row">
+    <ng-container *ngFor="let pelicula of peliculasFiltradas">
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+        <article>
+          <a [routerLink]="['/detalle', pelicula.slug]" class="text-decoration-none text-reset">
+            <div class="position-relative mb-2">
+              <img [src]="'assets/img/posters/' + pelicula.slug + '.webp'" [alt]="pelicula.nombre" class="w-100" />
+              <span class="año position-absolute bottom-0 end-0 translate-middle badge rounded-pill text-bg-primary">
+                {{ pelicula.anio }}
+              </span>
+            </div>
+            <h5>{{ pelicula.nombre }}</h5>
+            <p>
+              <strong>Géneros: </strong><span class="generos">{{ pelicula.generos.join(', ') }}</span>
+            </p>
+          </a>
+        </article>
+      </div>
+    </ng-container>
+  </div>
+</section>
