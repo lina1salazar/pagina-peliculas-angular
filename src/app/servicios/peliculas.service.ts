@@ -1,3 +1,4 @@
+import { map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
@@ -224,5 +225,8 @@ export class PeliculasService {
 
   getPeliculas(): Observable<Pelicula[]> {
     return of(this.peliculas);
+  }
+   obtenerPeliculaPorSlug(slug: string): Pelicula | undefined {
+  return this.peliculas.find(p => p.slug === slug);
   }
 }

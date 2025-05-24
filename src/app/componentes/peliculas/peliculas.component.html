@@ -1,17 +1,38 @@
 <section class="container peliculas-container">
   <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
     <h2 class="m-0 mb-2 me-3">Todas las películas</h2>
-    <div class="d-flex gap-3 flex-wrap">
+
+    <div class="d-flex gap-3 flex-wrap align-items-end">
+      <!-- Formulario de búsqueda -->
+      <form class="d-flex m-0" role="search" id="formulario-busqueda" (submit)="0">
+        <div class="input-group">
+          <input
+            class="form-control form-control-sm"
+            type="search"
+            placeholder="Buscar"
+            aria-label="buscar"
+            [(ngModel)]="filtroBusqueda"
+            name="busqueda"
+          />
+          <button class="btn btn-outline-secondary btn-sm" type="submit">
+            <i class="bi bi-search-heart"></i>
+          </button>
+        </div>
+      </form>
+
+      <!-- Filtro por género -->
       <div>
         <label for="genero">Género</label>
-        <select id="genero" class="form-select form-select-sm" [(ngModel)]="filtroGenero">
+        <select id="genero" class="form-select form-select-sm" [(ngModel)]="filtroGenero" name="genero">
           <option value="">Todos</option>
           <option *ngFor="let genero of generos" [value]="genero">{{ genero }}</option>
         </select>
       </div>
+
+      <!-- Filtro por año -->
       <div>
         <label for="anio">Año</label>
-        <select id="anio" class="form-select form-select-sm" [(ngModel)]="filtroAnio">
+        <select id="anio" class="form-select form-select-sm" [(ngModel)]="filtroAnio" name="anio">
           <option value="">Todos</option>
           <option *ngFor="let anio of anios" [value]="anio">{{ anio }}</option>
         </select>

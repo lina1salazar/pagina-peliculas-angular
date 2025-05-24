@@ -1,0 +1,14 @@
+.pelicula-detalle {
+  min-height: 300px;
+  position: relative;
+  color: #ffffff;
+
+  img.img-cover {
+    object-fit: cover;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+  }
+}

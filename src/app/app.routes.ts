@@ -5,6 +5,6 @@ import { ContactoComponent } from './paginas/contacto/contacto.component';
 
 export const routes: Routes = [
     {path: '', component: InicioComponent},
-    {path: 'detalle/:slug', component: DetalleComponent},
+    { path: 'detalle/:slug', component: DetalleComponent },
     {path:'contacto', component: ContactoComponent}
 ];

@@ -1,0 +1,22 @@
+<section *ngIf="pelicula" class="position-relative overflow-hidden pelicula-detalle">
+  <img [src]="'assets/img/backdrops/' + pelicula.slug + '.webp'"
+       alt="{{pelicula.nombre}} backdrop"
+       class="w-100 h-100 img-cover opacity-25 img-mask-fade position-absolute top-0 start-0 z-n1" />
+  <div class="container d-flex gap-4 py-4">
+    <div>
+      <img [src]="'assets/img/posters/' + pelicula.slug + '.webp'"
+           [alt]="pelicula.nombre + ' poster'"
+           width="200" />
+    </div>
+    <div>
+      <h3>{{ pelicula.nombre }}</h3>
+      <p>
+        <strong>{{ pelicula.puntuacion }}</strong>
+        <span *ngIf="pelicula.duracion"> - {{ pelicula.duracion }} min</span> - <span>{{ pelicula.anio }}</span>
+      </p>
+      <p>{{ pelicula.sinopsis }}</p>
+      <p><strong>Género:</strong> {{ pelicula.generos}}</p>
+      <p><strong>Actores:</strong> {{ pelicula.actores}}</p>
+    </div>
+  </div>
+</section>

@@ -16,6 +16,7 @@ export class PeliculasComponent implements OnInit {
   filtroAnio: string = '';
   generos: string[] = [];
   anios: number[] = [];
+  filtroBusqueda: string = '';
 
   constructor(private peliculasService: PeliculasService) {}
 
@@ -27,13 +28,15 @@ export class PeliculasComponent implements OnInit {
     });
   }
 
-  get peliculasFiltradas(): Pelicula[] {
-    return this.peliculas.filter(pelicula => {
-      const coincideGenero = this.filtroGenero === '' || pelicula.generos.includes(this.filtroGenero);
-      const coincideAnio = this.filtroAnio === '' || pelicula.anio.toString() === this.filtroAnio;
-      return coincideGenero && coincideAnio;
-    });
-  }
+get peliculasFiltradas(): Pelicula[] {
+  return this.peliculas.filter(pelicula => {
+    const coincideGenero = this.filtroGenero === '' || pelicula.generos.includes(this.filtroGenero);
+    const coincideAnio = this.filtroAnio === '' || pelicula.anio.toString() === this.filtroAnio;
+    const coincideBusqueda = this.filtroBusqueda === '' ||
+      pelicula.nombre.toLowerCase().includes(this.filtroBusqueda.toLowerCase());
+    return coincideGenero && coincideAnio && coincideBusqueda;
+  });
+}
 
   private obtenerGenerosUnicos(peliculas: Pelicula[]): string[] {
     const generosSet = new Set<string>();
