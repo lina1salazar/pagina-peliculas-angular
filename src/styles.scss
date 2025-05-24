@@ -1,1 +1,46 @@
-/* You can add global styles to this file, and also import other style files */
+$blue: #00044d;
+$body-bg: #080f28;
+$body-color: #b3c1d5;
+$azul-claro: #444ded;
+$carousel-control-color: $azul-claro;
+$carousel-indicator-active-bg: $azul-claro;
+
+$temas: (
+  claro: (
+    bg: #f5f7fa,
+    color: #1c1c1c,
+    primario: #444ded
+  ),
+  oscuro: (
+    bg: $body-bg,
+    color: $body-color,
+    primario: $azul-claro
+  )
+);
+
+@each $nombre, $valores in $temas {
+  .theme-#{$nombre} {
+    background-color: map-get($valores, bg);
+    color: map-get($valores, color);
+
+    .btn {
+      background-color: map-get($valores, primario);
+      color: white;
+
+      &:hover {
+        background-color: darken(map-get($valores, primario), 10%);
+        color: map-get($valores, color);
+      }
+    }
+  }
+}
+
+
+
+
+@import "../node_modules/bootstrap/scss/bootstrap.scss";
+
+
+@view-transition {
+    navigation: auto;
+}
