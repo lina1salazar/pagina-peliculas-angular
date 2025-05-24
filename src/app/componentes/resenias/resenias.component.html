@@ -1,1 +1,13 @@
-<app-resenia></app-resenia>
+<section class="container" id="reseñas">
+    <div class="d-flex gap-2 align-items-center p-3 my-3 text-white text-bg-primary rounded">
+        <i class="bi bi-star-half fs-4"></i>
+        <h3 class="m-0">Reseñas</h3>
+    </div>
+    <div class="my-3 p-3 bg-body rounded">
+        <app-resenia [nombre]="'John Doe'" [calificacion]="7.5" [resenia]="'Muy bueno, me encantó!'"></app-resenia>
+        <app-resenia [nombre]="'Juan'" [calificacion]="6.3"
+            [resenia]="'Con una estética cuidada hasta el último plano, esta cinta construye un universo emocional denso y magnético, donde el subtexto dice más que el diálogo'"></app-resenia>
+        <app-resenia [nombre]="'Richark'" [calificacion]="6.5"
+            [resenia]="'Una joya animada que equilibra sensibilidad y espectáculo, con una narrativa que conecta tanto con niños como con adultos!'"></app-resenia>
+    </div>
+</section>

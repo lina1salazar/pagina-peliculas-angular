@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input} from '@angular/core';
 
 @Component({
   selector: 'app-comentario',
@@ -7,5 +7,8 @@ import { Component } from '@angular/core';
   styleUrl: './comentario.component.scss'
 })
 export class ComentarioComponent {
-
+  @Input() nombre!: string;
+  @Input() calificacion!: number;
+  @Input() fecha!: string;
+  @Input() comentario!: string;
 }
