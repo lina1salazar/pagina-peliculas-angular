@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Pelicula, PeliculasService } from '../../servicios/peliculas.service';
+import { PeliculasService } from '../../servicios/peliculas.service';
 import { Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { Pelicula } from '../../interfaces/pelicula';
 
 
 @Component({

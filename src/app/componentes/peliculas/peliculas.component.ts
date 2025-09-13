@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { PeliculasService, Pelicula } from '../../servicios/peliculas.service';
+import { PeliculasService } from '../../servicios/peliculas.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { Pelicula } from '../../interfaces/pelicula';
 
 @Component({
   selector: 'app-peliculas',
@@ -19,19 +20,37 @@ export class PeliculasComponent implements OnInit {
   generos: string[] = [];
   anios: number[] = [];
   filtroBusqueda: string = '';
+  loading: boolean = false;
+  error : string | null = null;
+  
 
   constructor(private peliculasService: PeliculasService,private router: Router) {}
 
   ngOnInit(): void {
-    this.peliculasService.getPeliculas().subscribe(peliculas => {
-      this.peliculas = peliculas;
-      this.generos = this.obtenerGenerosUnicos(peliculas);
-      this.anios = this.obtenerAniosUnicos(peliculas);
+    console.log('PeliculasComponent initialized');
+    this.cargarPeliculas();
+
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
-   this.router.events.pipe(
-    filter(event => event instanceof NavigationEnd)
-  ).subscribe(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+cargarPeliculas(): void {
+  this.loading = true;
+  this.error = null;
+  this.peliculasService.getPeliculas().subscribe({
+    next: (response) => {
+      this.peliculas = response.data;
+      this.generos = this.obtenerGenerosUnicos(this.peliculas);
+      this.anios = this.obtenerAniosUnicos(this.peliculas);
+      this.loading = false;
+    },
+    error: (err) => {
+      this.error = err.message || 'Error al cargar las películas.';
+      this.loading = false;
+    }
   });
 }
 
