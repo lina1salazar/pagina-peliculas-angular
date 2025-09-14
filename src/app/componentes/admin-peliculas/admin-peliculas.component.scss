@@ -1,0 +1,73 @@
+.admin-container {
+  margin-top: 3rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+
+  .card {
+    background-color: #02172c;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+
+    form .form-control {
+      border-radius: 0.25rem;
+    }
+
+    button {
+      min-width: 80px;
+      border-radius: 0.25rem;
+    }
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th, td {
+      vertical-align: middle;
+      padding: 0.75rem;
+      text-align: left;
+    }
+
+    thead {
+      background-color: #e9ecef;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: #f8f9fa;
+    }
+
+    tbody tr:hover {
+      background-color: #e2e6ea;
+    }
+
+    button {
+      min-width: 70px;
+      border-radius: 0.25rem;
+    }
+  }
+}
+
+/* Botones */
+.btn-warning {
+  background-color: #ffc107;
+  border-color: #ffc107;
+  color: #000;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: #fff;
+}
+
+.btn-success {
+  background-color: #198754;
+  border-color: #198754;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+}

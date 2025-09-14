@@ -1,0 +1,52 @@
+<section class="container my-4">
+  <h2>Administración de Usuarios</h2>
+
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+  <div *ngIf="exitoMessage" class="alert alert-success">{{ exitoMessage }}</div>
+
+  <form [formGroup]="usuarioForm" (ngSubmit)="guardarUsuario()" class="mb-4">
+    <div class="mb-2">
+      <label>Nombre</label>
+      <input type="text" class="form-control" formControlName="nombre">
+    </div>
+    <div class="mb-2">
+      <label>Correo</label>
+      <input type="email" class="form-control" formControlName="correo">
+    </div>
+    <div class="mb-2">
+      <label>Rol</label>
+      <select class="form-control" formControlName="rol">
+        <option value="user">Usuario</option>
+        <option value="admin">Administrador</option>
+      </select>
+    </div>
+    <div class="mb-2">
+      <label>Contraseña</label>
+      <input type="password" class="form-control" formControlName="contrasena" placeholder="Solo para nuevo usuario o cambiar">
+    </div>
+    <button class="btn btn-primary">{{ editUsuarioId ? 'Actualizar' : 'Crear' }}</button>
+    <button type="button" class="btn btn-secondary" (click)="usuarioForm.reset({ rol: 'user' }); editUsuarioId = null;">Cancelar</button>
+  </form>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Correo</th>
+        <th>Rol</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let u of usuarios">
+        <td>{{ u.nombre }}</td>
+        <td>{{ u.correo }}</td>
+        <td>{{ u.rol }}</td>
+        <td>
+          <button class="btn btn-sm btn-warning me-2" (click)="editarUsuario(u)">Editar</button>
+          <button class="btn btn-sm btn-danger" (click)="eliminarUsuario(u.id_usuario!)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>

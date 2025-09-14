@@ -1,51 +1,74 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { NgFor, NgIf } from '@angular/common';
+import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
+import { Comentario } from '../../interfaces/comentario';
+import { ComentariosService } from '../../servicios/comentarios.service';
+import { AuthService } from '../../servicios/auth.service';
 import { ComentarioComponent } from '../comentario/comentario.component';
-import { NgFor } from '@angular/common';
-import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-comentarios',
-  imports: [ComentarioComponent, NgFor, ReactiveFormsModule],
+  standalone: true,
+  imports: [ComentarioComponent, NgFor, NgIf, ReactiveFormsModule],
   templateUrl: './comentarios.component.html',
-  styleUrl: './comentarios.component.scss'
+  styleUrls: ['./comentarios.component.scss']
 })
-export class ComentariosComponent {
-   comentarios = [
-    {
-      nombre: 'John Doe',
-      calificacion: 6.3,
-      fecha: '2025-04-22',
-      texto: 'Muy bueno, me encantó!'
-    },
-    {
-      nombre: 'Jane Smith',
-      calificacion: 8.5,
-      fecha: '2025-04-21',
-      texto: 'Una experiencia increíble.'
-    }
-  ];
+export class ComentariosComponent implements OnInit {
+  @Input() idPelicula!: number;
+  comentarios: Comentario[] = [];
+  comentarioForm: FormGroup;
+  usuarioAutenticado = false;
+  errorMessage = '';
 
-
-  comentarioForm = new FormGroup({
-    nombre: new FormControl(''),
-    calificacion: new FormControl(0),
-    texto: new FormControl('')
-  });
-
-  agregarComentario() {
-    const fechaHoy = new Date().toISOString().split('T')[0];
-    this.comentarios.push({
-      nombre: this.comentarioForm.value.nombre ?? '',
-      calificacion: this.comentarioForm.value.calificacion ?? 0,
-      fecha: fechaHoy,
-      texto: this.comentarioForm.value.texto ?? ''
+  constructor(
+    private comentariosService: ComentariosService,
+    private authService: AuthService
+  ) {
+    this.comentarioForm = new FormGroup({
+      contenido: new FormControl('', [Validators.required, Validators.minLength(5)]),
+      calificacion: new FormControl(0, [Validators.required, Validators.min(1), Validators.max(10)])
     });
+  }
 
-    this.comentarioForm.reset({
-      nombre: '',
-      calificacion: 0,
-      texto: ''
-    })
+  ngOnInit(): void {
+    this.usuarioAutenticado = this.authService.isAuthenticated();
+    this.cargarComentarios();
+  }
 
+  cargarComentarios(): void {
+    this.comentariosService.getComentarios(this.idPelicula).subscribe({
+      next: (data) => this.comentarios = data,
+      error: (err) => console.error('Error al cargar comentarios', err)
+    });
+  }
+
+  agregarComentario(): void {
+    if (!this.usuarioAutenticado) {
+      this.errorMessage = 'Debes iniciar sesión para comentar';
+      return;
+    }
+
+    if (this.comentarioForm.invalid) {
+      this.comentarioForm.markAllAsTouched();
+      return;
+    }
+
+    const nuevoComentario: Partial<Comentario> = {
+      contenido: this.comentarioForm.value.contenido,
+      calificacion: this.comentarioForm.value.calificacion,
+      id_pelicula: this.idPelicula
+    };
+
+    this.comentariosService.agregarComentario(nuevoComentario).subscribe({
+      next: (comentario: Comentario) => {
+        this.comentarios.push(comentario);
+        this.comentarioForm.reset({ contenido: '', calificacion: 0 });
+        this.errorMessage = '';
+      },
+      error: (err) => {
+        console.error('Error al agregar comentario', err);
+        this.errorMessage = 'No se pudo agregar el comentario';
+      }
+    });
   }
 }

@@ -5,13 +5,12 @@ import { AuthService } from '../servicios/auth.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard {
+export class AdminGuard {
   constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(): boolean {
     const usuario = this.authService.getUsuario();
-
-    if (usuario) {
+    if (usuario && usuario.rol === 'admin') {
       return true;
     }
 
