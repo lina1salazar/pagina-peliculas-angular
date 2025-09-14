@@ -1,20 +1,27 @@
 <header>
-        <nav class="navbar navbar-expand-lg py-4">
-            <div class="container">
-                <a class="navbar-brand text-white" href="/">NickPelis 🍿</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    </ul>
-                    <div class="d-flex gap-4">
-                       <a href="contacto" class="btn btn-primary">Contacto</a>   
-                    </div>
-                    
-                </div>
-            </div>
-        </nav>
-    </header>
+  <nav class="navbar navbar-expand-lg py-4">
+    <div class="container">
+      <a class="navbar-brand text-white" routerLink="/">NickPelis 🍿</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+              data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+              aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
+
+        <div class="d-flex gap-4">
+          <a routerLink="/contacto" class="btn btn-primary">Contacto</a>
+
+          <ng-container *ngIf="!authService.isAuthenticated(); else loggedIn">
+            <a routerLink="/login" class="btn btn-outline-light">Login</a>
+          </ng-container>
+          <ng-template #loggedIn>
+            <button class="btn btn-danger" (click)="logout()">Cerrar sesión</button>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
