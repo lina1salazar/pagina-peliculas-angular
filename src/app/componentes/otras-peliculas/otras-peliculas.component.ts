@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { PeliculasService, Pelicula } from '../../servicios/peliculas.service';
+import { PeliculasService } from '../../servicios/peliculas.service';
 import { CommonModule } from '@angular/common';
+import { Pelicula } from '../../interfaces/pelicula';
 
 @Component({
   selector: 'app-otras-peliculas',
@@ -15,7 +16,8 @@ export class OtrasPeliculasComponent implements OnInit {
   constructor(private peliculasService: PeliculasService) {}
 
   ngOnInit(): void {
-    this.peliculasService.getPeliculas().subscribe(peliculas => {
+    // Ahora usamos las destacadas
+    this.peliculasService.getPeliculasDestacadas().subscribe(peliculas => {
       this.peliculasOtras = this.obtenerSeisAleatorias(peliculas);
     });
   }
@@ -26,6 +28,6 @@ export class OtrasPeliculasComponent implements OnInit {
       const j = Math.floor(Math.random() * (i + 1));
       [copia[i], copia[j]] = [copia[j], copia[i]];
     }
-    return copia.slice(0, 4);
+    return copia.slice(0, 6);
   }
 }

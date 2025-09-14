@@ -26,6 +26,12 @@ export class PeliculasService {
   return undefined;
   }
 
+    getPeliculasDestacadas(): Observable<Pelicula[]> {
+    return this.http.get<Pelicula[]>(`${this.apiUrl}?destacadas=true`).pipe(
+      catchError(this.handleError)
+    );
+  }
+
   private handleError(error : HttpErrorResponse){
     let errorMessage = 'Ocurrió un error.';
     if (error.error instanceof ErrorEvent) {
