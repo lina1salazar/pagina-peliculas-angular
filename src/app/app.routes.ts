@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { InicioComponent } from './paginas/inicio/inicio.component';
 import { DetalleComponent } from './paginas/detalle/detalle.component';
 import { ContactoComponent } from './paginas/contacto/contacto.component';
-import { LoginComponent } from './login/login.component';
+import { LoginComponent } from './componentes/login/login.component';
 import { RegistroComponent } from './componentes/registro/registro.component';
 
 export const routes: Routes = [
