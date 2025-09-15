@@ -8,5 +8,6 @@ export interface Pelicula {
     actores: string[];
     sinopsis: string;
     generos: string[];
-    poster_url : string
+    poster_url : string;
+    banner_url : string;
 }
