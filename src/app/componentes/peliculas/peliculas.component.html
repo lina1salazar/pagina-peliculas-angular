@@ -44,7 +44,7 @@
     <ng-container *ngFor="let pelicula of peliculasFiltradas">
       <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
         <article>
-          <a [routerLink]="['/detalle', pelicula.slug]" class="text-decoration-none text-reset">
+          <a [routerLink]="['/detalle', pelicula.id_pelicula]" class="text-decoration-none text-reset">
             <div class="position-relative mb-2">
               <img [src]="pelicula.poster_url" alt="Póster de {{ pelicula.nombre }}" class="w-100" />
               <span class="año position-absolute bottom-0 end-0 translate-middle badge rounded-pill text-bg-primary">

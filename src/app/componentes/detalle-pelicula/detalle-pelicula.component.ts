@@ -15,6 +15,7 @@ import { Pelicula } from '../../interfaces/pelicula';
   styleUrls: ['./detalle-pelicula.component.scss']
 })
 export class DetallePeliculaComponent implements OnInit {
+  @Input() idPelicula!: number;
   pelicula?: Pelicula;
 
   constructor(
@@ -23,21 +24,15 @@ export class DetallePeliculaComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const slug = this.route.snapshot.paramMap.get('slug');
-    if (slug!) {
-      this.peliculasService.getPeliculas().subscribe(res => {
-      const peliculaMin = res.data.find(p => p.slug === slug);
-      
-      if (!peliculaMin) return;
-
-      this.peliculasService.getPelicula(peliculaMin.id_pelicula).subscribe(p => {
+    if (this.idPelicula) {
+      this.peliculasService.getPelicula(this.idPelicula).subscribe(res => {
+        const pelicula = res as Pelicula;
         this.pelicula = {
-          ...p,
-          actores: p.actores ?? [],
-          generos: p.generos ?? [],
-          sinopsis: p.sinopsis ?? ''
+          ...pelicula,
+          actores: pelicula.actores ?? [],
+          generos: pelicula.generos ?? [],
+          sinopsis: pelicula.sinopsis ?? ''
         };
-      });
     } ); 
     }
   }

@@ -27,7 +27,7 @@
           {{ pelicula.duracion }} min - {{ pelicula.anio }}
         </p>
         <p class="d-none d-md-block">{{ pelicula.sinopsis }}</p>
-        <a [routerLink]="['/detalle', pelicula.slug]"
+        <a [routerLink]="['/detalle', pelicula.id_pelicula]"
            class="btn btn-outline-light">
           Ver detalles
         </a>

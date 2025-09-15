@@ -4,4 +4,6 @@ export interface Comentario {
     id_pelicula?: number;
     contenido: string;
     calificacion: number;
+    fecha_comentario?: string;
+    usuario?: string;
 }

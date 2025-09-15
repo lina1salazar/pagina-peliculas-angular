@@ -8,7 +8,9 @@
     <app-comentario 
       *ngFor="let c of comentarios"
       [calificacion]="c.calificacion"
-      [comentario]="c.contenido">
+      [contenido]="c.contenido"
+      [fecha_comentario]="c.fecha_comentario ?? ''"
+      [usuario]="c.usuario ?? ''">
     </app-comentario>
   </div>
 
@@ -20,13 +22,33 @@
       {{ errorMessage }}
     </div>
 
-    <div>
+    <div class="mb-3">
       <label for="contenido" class="form-label">Comentario</label>
-      <textarea class="form-control" id="contenido" formControlName="contenido" rows="3" required></textarea>
+      <textarea class="form-control"
+                id="contenido"
+                formControlName="contenido"
+                rows="3"
+                required
+                [ngClass]="{'is-invalid': comentarioForm.get('contenido')?.invalid && comentarioForm.get('contenido')?.touched}">
+      </textarea>
+      <div *ngIf="comentarioForm.get('contenido')?.invalid && comentarioForm.get('contenido')?.touched" class="invalid-feedback">
+        El comentario es requerido y debe tener al menos 5 caracteres.
+      </div>
     </div>
     <div class="mb-3">
       <label for="calificacion" class="form-label">Calificación (1-10)</label>
-      <input type="number" class="form-control" id="calificacion" formControlName="calificacion" min="1" max="10" step="0.1" required>
+      <input type="number"
+            class="form-control"
+            id="calificacion"
+            formControlName="calificacion"
+            min="1"
+            max="10"
+            step="0.1"
+            required
+            [ngClass]="{'is-invalid': comentarioForm.get('calificacion')?.invalid && comentarioForm.get('calificacion')?.touched}">
+      <div *ngIf="comentarioForm.get('calificacion')?.invalid && comentarioForm.get('calificacion')?.touched" class="invalid-feedback">
+        La calificación debe estar entre 1 y 10.
+      </div>
     </div>
     <button type="submit" class="btn btn-primary" [disabled]="!usuarioAutenticado">Enviar</button>
   </form>

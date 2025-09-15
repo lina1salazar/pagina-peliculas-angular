@@ -27,7 +27,7 @@ export class ComentariosService {
       );
   }
 
-  agregarComentario(comentario: Partial<Comentario>): Observable<Comentario> {
+  agregarComentario(comentario: Partial<Comentario>, idPelicula: number): Observable<Comentario> {
     const token = this.authService.getAccessToken();
     if (!token) {
       return throwError(() => new Error('No autenticado'));
@@ -38,7 +38,7 @@ export class ComentariosService {
     });
 
     return this.http.post<Comentario>(
-      `${this.apiUrl}/${comentario.id_pelicula}/comentarios`,
+      `${this.apiUrl}/${idPelicula}/comentarios`,
       comentario,
       { headers }
     ).pipe(

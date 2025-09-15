@@ -1,26 +1,32 @@
-<section *ngIf="pelicula as peli" class="position-relative overflow-hidden pelicula-detalle">
+<section *ngIf="pelicula" class="position-relative overflow-hidden pelicula-detalle">
   <img [src]="pelicula.banner_url"
        alt="{{pelicula.nombre}} backdrop"
        class="w-100 h-100 img-cover opacity-25 img-mask-fade position-absolute top-0 start-0 z-n1" />
   <div class="container d-flex gap-4 py-4">
     <div>
-      <img [src]="peli.poster_url"
-           [alt]="peli.nombre + ' poster'"
+      <img [src]="pelicula.poster_url"
+           [alt]="pelicula.nombre + ' poster'"
            width="200" />
     </div>
     <div>
-      <h3>{{ peli.nombre }}</h3>
+      <h3>{{ pelicula.nombre }}</h3>
       <p>
-        <strong>{{ peli.puntuacion }}</strong>
-        <span *ngIf="peli.duracion"> - {{ peli.duracion }} min</span> - <span>{{ peli.anio }}</span>
+        <strong>{{ pelicula.puntuacion }}</strong>
+        <span *ngIf="pelicula.duracion"> - {{ pelicula.duracion }} min</span> - <span>{{ pelicula.anio }}</span>
       </p>
-      <p>{{ peli.sinopsis }}</p>
+      <p>{{ pelicula.sinopsis }}</p>
 
-      <p *ngIf="peli.generos.length > 0">
-        <strong>Género:</strong> {{ peli.generos.join(', ') }}
+      <p *ngIf="pelicula.generos.length > 0">
+        <strong>Género:</strong>
+        <span *ngFor="let genero of pelicula.generos; let last = last">
+          {{ genero.nombre }}<span *ngIf="!last">, </span>
+        </span>
       </p>
-      <p *ngIf="peli.actores.length > 0">
-        <strong>Actores:</strong> {{ peli.actores.join(', ') }}
+      <p *ngIf="pelicula.actores.length > 0">
+        <strong>Actores:</strong>
+        <span *ngFor="let actor of pelicula.actores; let last = last">
+          {{ actor.nombre }}<span *ngIf="!last">, </span>
+        </span>
       </p>
     </div>
   </div>

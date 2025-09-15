@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { NgFor, NgIf } from '@angular/common';
+import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Comentario } from '../../interfaces/comentario';
 import { ComentariosService } from '../../servicios/comentarios.service';
@@ -9,7 +9,7 @@ import { ComentarioComponent } from '../comentario/comentario.component';
 @Component({
   selector: 'app-comentarios',
   standalone: true,
-  imports: [ComentarioComponent, NgFor, NgIf, ReactiveFormsModule],
+  imports: [ComentarioComponent, NgFor, NgIf, ReactiveFormsModule, CommonModule],
   templateUrl: './comentarios.component.html',
   styleUrls: ['./comentarios.component.scss']
 })
@@ -43,6 +43,7 @@ export class ComentariosComponent implements OnInit {
   }
 
   agregarComentario(): void {
+    console.log('Agregar comentario llamado');
     if (!this.usuarioAutenticado) {
       this.errorMessage = 'Debes iniciar sesión para comentar';
       return;
@@ -50,20 +51,21 @@ export class ComentariosComponent implements OnInit {
 
     if (this.comentarioForm.invalid) {
       this.comentarioForm.markAllAsTouched();
+      this.errorMessage = 'Por favor, corrige los errores antes de enviar.';
       return;
     }
 
     const nuevoComentario: Partial<Comentario> = {
       contenido: this.comentarioForm.value.contenido,
       calificacion: this.comentarioForm.value.calificacion,
-      id_pelicula: this.idPelicula
     };
 
-    this.comentariosService.agregarComentario(nuevoComentario).subscribe({
+    this.comentariosService.agregarComentario(nuevoComentario, this.idPelicula).subscribe({
       next: (comentario: Comentario) => {
         this.comentarios.push(comentario);
         this.comentarioForm.reset({ contenido: '', calificacion: 0 });
         this.errorMessage = '';
+        this.cargarComentarios();
       },
       error: (err) => {
         console.error('Error al agregar comentario', err);

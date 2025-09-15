@@ -15,7 +15,7 @@ import { AdminGenerosComponent } from './componentes/admin-generos/admin-generos
 
 export const routes: Routes = [
     {path: '', component: InicioComponent},
-    { path: 'detalle/:slug', component: DetalleComponent },
+    { path: 'detalle/:id', component: DetalleComponent },
     { path:'contacto', component: ContactoComponent},
     { path:'login', component: LoginComponent},
     { path:'registro', component: RegistroComponent},

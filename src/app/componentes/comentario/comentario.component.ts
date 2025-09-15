@@ -7,8 +7,21 @@ import { Component, Input} from '@angular/core';
   styleUrl: './comentario.component.scss'
 })
 export class ComentarioComponent {
-  @Input() nombre!: string;
+  @Input() usuario!: string;
   @Input() calificacion!: number;
-  @Input() fecha!: string;
-  @Input() comentario!: string;
+  @Input() fecha_comentario!: string;
+  @Input() contenido!: string;
+
+
+  get fechaFormateada(): string {
+    if (!this.fecha_comentario) return '';
+    const fecha = new Date(this.fecha_comentario);
+    return fecha.toLocaleString('es-ES', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
 }
