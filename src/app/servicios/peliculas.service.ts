@@ -63,13 +63,9 @@ export class PeliculasService {
   }
 
   private handleError(error: HttpErrorResponse) {
-    let errorMessage = 'Ocurrió un error.';
-    if (error.error instanceof ErrorEvent) {
-      errorMessage = `Error: ${error.error.message}`;
-    } else {
-      errorMessage = `Código de error: ${error.status}\nMessage: ${error.message}`;
-    }
-    console.error(errorMessage);
-    return throwError(() => new Error(errorMessage));
+    console.error("Código de error:", error.status);
+    console.error("Body del backend:", error.error);
+
+    return throwError(() => error);
   }
 }

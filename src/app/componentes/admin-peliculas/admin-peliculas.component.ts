@@ -4,6 +4,10 @@ import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angula
 import { PeliculasService } from '../../servicios/peliculas.service';
 import { Pelicula } from '../../interfaces/pelicula';
 import { Observable } from 'rxjs';
+import { GenerosService } from '../../servicios/generos.service';
+import { ActoresService } from '../../servicios/actores.service';
+import { Genero } from '../../interfaces/generos';
+import { Actor } from '../../interfaces/actor';
 
 @Component({
   selector: 'app-admin-peliculas',
@@ -14,14 +18,23 @@ import { Observable } from 'rxjs';
 })
 export class AdminPeliculasComponent implements OnInit {
   peliculas: Pelicula[] = [];
+  generos: Genero[] = [];
+  actores: Actor[] = [];
   peliculaForm: FormGroup;
   editing: boolean = false;
   currentId: number | null = null;
 
+  errores: { [key: string]: string[] } = {};
+  mensajeError: string | null = null;
+
   posterFile: File | null = null;
   bannerFile: File | null = null;
 
-  constructor(private peliculasService: PeliculasService) {
+  posterUrl: string | null = null;
+  bannerUrl: string | null = null;
+  
+
+  constructor(private peliculasService: PeliculasService, private generosService: GenerosService, private actoresService: ActoresService) {
     this.peliculaForm = new FormGroup({
       nombre: new FormControl('', Validators.required),
       slug: new FormControl('', Validators.required),
@@ -38,12 +51,32 @@ export class AdminPeliculasComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarPeliculas();
+    this.cargarGeneros();
+    this.cargarActores();
   }
 
   cargarPeliculas(): void {
     this.peliculasService.getPeliculas().subscribe(res => {
       this.peliculas = res.data;
     });
+  }
+
+  cargarGeneros(): void {
+    this.generosService.getGeneros().subscribe(res => {
+      this.generos = res;
+    });
+  }
+  cargarActores(): void {
+    this.actoresService.getActores().subscribe(res => {
+      this.actores = res;
+    });
+  }
+
+  get erroresArray(): { campo: string, mensaje: string }[] {
+    return Object.entries(this.errores).map(([campo, mensajes]) => ({
+      campo,
+      mensaje: mensajes[0]
+    }));
   }
 
   onFileSelected(event: Event, type: 'poster_file' | 'banner_file'): void {
@@ -53,24 +86,32 @@ export class AdminPeliculasComponent implements OnInit {
     if (type === 'banner_file') this.bannerFile = file;
   }
 
-  editarPelicula(pelicula: Pelicula): void {
+  editarPelicula(id_pelicula: number): void {
     this.editing = true;
-    this.currentId = pelicula.id_pelicula;
+    this.currentId = id_pelicula;
     this.posterFile = null;
     this.bannerFile = null;
 
-    this.peliculaForm.setValue({
-      nombre: pelicula.nombre,
-      slug: pelicula.slug || '',
-      anio: pelicula.anio,
-      puntuacion: pelicula.puntuacion,
-      duracion: pelicula.duracion,
-      actores: (pelicula.actores || []).join(', '),
-      generos: (pelicula.generos || []).join(', '),
-      sinopsis: pelicula.sinopsis || '',
-      poster_file: null,
-      banner_file: null
-    });
+    this.peliculasService.getPelicula(id_pelicula).subscribe(res => {
+      const pelicula = res as Pelicula;
+      this.posterUrl = pelicula.poster_url || null;
+      this.bannerUrl = pelicula.banner_url || null;
+      console.log(pelicula)
+      this.peliculaForm.setValue({
+        nombre: pelicula.nombre,
+        slug: pelicula.slug,
+        anio: pelicula.anio,
+        puntuacion: pelicula.puntuacion,
+        duracion: pelicula.duracion,
+        actores: pelicula.actores.map(actor => actor.id_actor) || [],
+        generos: pelicula.generos.map(genero => genero.id_genero) || [],
+        sinopsis: pelicula.sinopsis || '',
+        poster_file: null,
+        banner_file: null
+      });
+    })
+
+    
   }
 
   cancelar(): void {
@@ -78,6 +119,8 @@ export class AdminPeliculasComponent implements OnInit {
     this.currentId = null;
     this.posterFile = null;
     this.bannerFile = null;
+    this.posterUrl = null;
+    this.bannerUrl = null;
     this.peliculaForm.reset({
       nombre: '',
       slug: '',
@@ -94,18 +137,23 @@ export class AdminPeliculasComponent implements OnInit {
 
   guardar(): void {
     const formValue = this.peliculaForm.value;
-
+    
+    
     // Crear FormData para enviar a la API
     const formData = new FormData();
     formData.append('nombre', formValue.nombre);
-    formData.append('slug', formValue.slug);
     formData.append('anio', formValue.anio.toString());
     formData.append('puntuacion', formValue.puntuacion.toString());
     formData.append('duracion', formValue.duracion.toString());
-    formData.append('actores', formValue.actores);
-    formData.append('generos', formValue.generos);
     formData.append('sinopsis', formValue.sinopsis);
-
+    // Agregar actores y géneros como arreglos
+    if (Array.isArray(formValue.actores)) {
+      formValue.actores.forEach((actorId: number) => formData.append('actores', actorId.toString()));
+    }
+    if (Array.isArray(formValue.generos)) {
+      formValue.generos.forEach((generoId: number) => formData.append('generos', generoId.toString()));
+    }
+    
     if (this.posterFile) formData.append('poster', this.posterFile);
     if (this.bannerFile) formData.append('banner', this.bannerFile);
 
@@ -122,7 +170,16 @@ export class AdminPeliculasComponent implements OnInit {
         this.cargarPeliculas();
         this.cancelar();
       },
-      error: (err) => console.error('Error al guardar película:', err)
+      error: (err) =>{
+        console.error('Error completo:', err);
+        console.error('err.error.errors:', err.error?.errors);
+
+        if (err.error && err.error.errors) {
+          this.errores = err.error.errors;
+        } else {
+          this.mensajeError = err.error?.message || 'Error al guardar la película.';
+        }
+      }
     });
   }
 

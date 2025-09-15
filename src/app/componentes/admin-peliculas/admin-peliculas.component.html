@@ -22,12 +22,20 @@
           <input type="number" class="form-control" formControlName="duracion" required>
         </div>
         <div class="col-md-6">
-          <label class="form-label">Actores (separados por coma)</label>
-          <input type="text" class="form-control" formControlName="actores">
+          <label class="form-label">Actores</label>
+          <select class="form-control" formControlName="actores" multiple>
+            <option *ngFor="let actor of actores" [value]="actor.id_actor">
+              {{ actor.nombre }}
+            </option>
+          </select>
         </div>
         <div class="col-md-6">
-          <label class="form-label">Géneros (separados por coma)</label>
-          <input type="text" class="form-control" formControlName="generos">
+          <label class="form-label">Generos</label>
+          <select class="form-control" formControlName="generos" multiple>
+            <option *ngFor="let genero of generos" [value]="genero.id_genero">
+              {{ genero.nombre }}
+            </option>
+          </select>
         </div>
         <div class="col-12">
           <label class="form-label">Sinopsis</label>
@@ -36,10 +44,16 @@
         <div class="col-md-6">
           <label class="form-label">Poster</label>
           <input type="file" class="form-control" (change)="onFileSelected($event, 'poster_file')">
+          <div *ngIf="posterUrl" class="mt-2">
+            <img [src]="posterUrl" alt="Poster actual" style="max-width: 150px; max-height: 200px;">
+          </div>
         </div>
         <div class="col-md-6">
           <label class="form-label">Banner</label>
           <input type="file" class="form-control" (change)="onFileSelected($event, 'banner_file')">
+          <div *ngIf="bannerUrl" class="mt-2">
+            <img [src]="bannerUrl" alt="Banner actual" style="max-width: 300px; max-height: 100px;">
+          </div>
         </div>
       </div>
 
@@ -48,6 +62,16 @@
         <button type="button" class="btn btn-secondary" *ngIf="editing" (click)="cancelar()">Cancelar</button>
       </div>
     </form>
+    <div *ngIf="mensajeError" class="alert alert-danger mt-3">
+      {{ mensajeError }}
+    </div>
+    <div *ngIf="erroresArray.length > 0" class="alert alert-danger mt-3">
+      <ul class="mb-0">
+        <li *ngFor="let error of erroresArray">
+          <strong>{{ error.campo }}:</strong> {{ error.mensaje }}
+        </li>
+      </ul>
+    </div>
   </div>
 
   <div class="table-responsive">
@@ -56,8 +80,6 @@
         <tr>
           <th>Nombre</th>
           <th>Año</th>
-          <th>Puntuación</th>
-          <th>Duración</th>
           <th>Acciones</th>
         </tr>
       </thead>
@@ -65,10 +87,8 @@
         <tr *ngFor="let pelicula of peliculas">
           <td>{{ pelicula.nombre }}</td>
           <td>{{ pelicula.anio }}</td>
-          <td>{{ pelicula.puntuacion }}</td>
-          <td>{{ pelicula.duracion }} min</td>
           <td>
-            <button class="btn btn-sm btn-warning me-2" (click)="editarPelicula(pelicula)">Editar</button>
+            <button class="btn btn-sm btn-warning me-2" (click)="editarPelicula(pelicula.id_pelicula)">Editar</button>
             <button class="btn btn-sm btn-danger" (click)="eliminarPelicula(pelicula.id_pelicula)">Eliminar</button>
           </td>
         </tr>
