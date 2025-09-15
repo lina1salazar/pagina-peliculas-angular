@@ -56,7 +56,7 @@ cargarPeliculas(): void {
 
 get peliculasFiltradas(): Pelicula[] {
   return this.peliculas.filter(pelicula => {
-    const coincideGenero = this.filtroGenero === '' || pelicula.generos.includes(this.filtroGenero);
+    const coincideGenero = this.filtroGenero === '' || pelicula.generos.includes(this.filtroGenero as any);
     const coincideAnio = this.filtroAnio === '' || pelicula.anio.toString() === this.filtroAnio;
     const coincideBusqueda = this.filtroBusqueda === '' ||
       pelicula.nombre.toLowerCase().includes(this.filtroBusqueda.toLowerCase());
@@ -66,7 +66,7 @@ get peliculasFiltradas(): Pelicula[] {
 
   private obtenerGenerosUnicos(peliculas: Pelicula[]): string[] {
     const generosSet = new Set<string>();
-    peliculas.forEach(p => p.generos.forEach(g => generosSet.add(g)));
+    peliculas.forEach(p => p.generos.forEach(g => generosSet.add(String(g))));
     return Array.from(generosSet).sort();
   }
 

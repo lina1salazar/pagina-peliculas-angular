@@ -10,6 +10,7 @@ export interface Pelicula {
     duracion: number;
     actores: Actor[];
     sinopsis: string;
-    generos: string[];
-    poster_url : string
+    generos: Genero[];
+    poster_url : string;
+    banner_url : string;
 }

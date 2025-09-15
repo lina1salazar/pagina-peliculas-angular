@@ -24,8 +24,21 @@ export class DetallePeliculaComponent implements OnInit {
 
   ngOnInit(): void {
     const slug = this.route.snapshot.paramMap.get('slug');
-    if (slug) {
-      this.pelicula = this.peliculasService.obtenerPeliculaPorSlug(slug);
+    if (slug!) {
+      this.peliculasService.getPeliculas().subscribe(res => {
+      const peliculaMin = res.data.find(p => p.slug === slug);
+      
+      if (!peliculaMin) return;
+
+      this.peliculasService.getPelicula(peliculaMin.id_pelicula).subscribe(p => {
+        this.pelicula = {
+          ...p,
+          actores: p.actores ?? [],
+          generos: p.generos ?? [],
+          sinopsis: p.sinopsis ?? ''
+        };
+      });
+    } ); 
     }
   }
 }
