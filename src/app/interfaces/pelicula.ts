@@ -1,3 +1,6 @@
+import { Actor } from "./actor";
+import { Genero } from "./generos";
+
 export interface Pelicula {
     id_pelicula: number;
     slug: string;
@@ -5,8 +8,9 @@ export interface Pelicula {
     anio: number;
     puntuacion: number;
     duracion: number;
-    actores: string[];
+    actores: Actor[];
     sinopsis: string;
-    generos: string[];
-    poster_url : string
+    generos: Genero[];
+    poster_url : string;
+    banner_url : string;
 }
