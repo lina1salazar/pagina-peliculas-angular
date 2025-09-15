@@ -4,12 +4,13 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Pelicula } from '../interfaces/pelicula';
 import { ApiResponse } from '../interfaces/apiResponse';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PeliculasService {
-  private apiUrl: string = 'http://localhost:5000/api/peliculas';
+  private apiUrl = `${environment.apiUrl}/peliculas`;
 
   constructor(private http: HttpClient) { }
 
@@ -28,11 +29,18 @@ export class PeliculasService {
     );
   }
 
-  obtenerPeliculaPorSlug(slug: string): Pelicula | undefined {
-    // return this.peliculas.find(p => p.slug === slug);
-    return undefined;
-  }
+  getPeliculasFiltradas(params: { genero?: string; anio?: string; q?: string } = {}): Observable<ApiResponse<Pelicula[]>> {
+    const queryParams: string[] = [];
+    if (params.genero) queryParams.push(`genero=${encodeURIComponent(params.genero)}`);
+    if (params.anio) queryParams.push(`anio=${encodeURIComponent(params.anio)}`);
+    if (params.q) queryParams.push(`q=${encodeURIComponent(params.q)}`);
+    const url = queryParams.length > 0 ? `${this.apiUrl}?${queryParams.join('&')}` : this.apiUrl;
 
+    return this.http.get<Pelicula[]>(url).pipe(
+      map((data) => ({ data } as ApiResponse<Pelicula[]>)),
+      catchError(this.handleError)
+    );
+  }
 
   // Crear nueva película (solo admin)
   crearPelicula(formData: FormData): Observable<Pelicula> {

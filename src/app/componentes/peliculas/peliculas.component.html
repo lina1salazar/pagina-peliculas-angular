@@ -2,62 +2,50 @@
   <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
     <h2 class="m-0 mb-2 me-3">Todas las películas</h2>
 
-    <div class="d-flex gap-3 flex-wrap align-items-end">
-      <!-- Formulario de búsqueda -->
-      <form class="d-flex m-0" role="search" id="formulario-busqueda" (submit)="0">
-        <div class="input-group">
-          <input
-            class="form-control form-control-sm"
-            type="search"
-            placeholder="Buscar"
-            aria-label="buscar"
-            [(ngModel)]="filtroBusqueda"
-            name="busqueda"
-          />
-          <button class="btn btn-outline-secondary btn-sm" type="submit" title="Buscar">
-            <i class="bi bi-search-heart"></i>
-          </button>
-        </div>
-      </form>
-
-      <!-- Filtro por género -->
+    <form class="d-flex gap-3 flex-wrap align-items-end mb-4">
       <div>
-        <label for="genero">Género</label>
-        <select id="genero" class="form-select form-select-sm" [(ngModel)]="filtroGenero" name="genero">
+        <label for="filtroGenero" class="form-label">Género</label>
+        <select id="filtroGenero" class="form-select" [(ngModel)]="filtroGenero" name="filtroGenero" (change)="filtrarPeliculas()">
           <option value="">Todos</option>
           <option *ngFor="let genero of generos" [value]="genero">{{ genero }}</option>
         </select>
       </div>
-
-      <!-- Filtro por año -->
       <div>
-        <label for="anio">Año</label>
-        <select id="anio" class="form-select form-select-sm" [(ngModel)]="filtroAnio" name="anio">
+        <label for="filtroAnio" class="form-label">Año</label>
+        <select id="filtroAnio" class="form-select" [(ngModel)]="filtroAnio" name="filtroAnio" (change)="filtrarPeliculas()">
           <option value="">Todos</option>
           <option *ngFor="let anio of anios" [value]="anio">{{ anio }}</option>
         </select>
       </div>
+      <div>
+        <label for="filtroBusqueda" class="form-label">Buscar</label>
+        <input id="filtroBusqueda" type="text" class="form-control" [(ngModel)]="filtroBusqueda" name="filtroBusqueda" (input)="filtrarPeliculas()" placeholder="Buscar por nombre...">
+      </div>
+    </form>
+
+    <div *ngIf="loading" class="text-center my-4">
+      <div class="spinner-border" role="status"></div>
+      <span class="ms-2">Cargando...</span>
     </div>
+    <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
   </div>
 
   <div class="row">
-    <ng-container *ngFor="let pelicula of peliculasFiltradas">
-      <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
-        <article>
-          <a [routerLink]="['/detalle', pelicula.id_pelicula]" class="text-decoration-none text-reset">
-            <div class="position-relative mb-2">
-              <img [src]="pelicula.poster_url" alt="Póster de {{ pelicula.nombre }}" class="w-100" />
-              <span class="año position-absolute bottom-0 end-0 translate-middle badge rounded-pill text-bg-primary">
-                {{ pelicula.anio }}
-              </span>
-            </div>
-            <h5>{{ pelicula.nombre }}</h5>
-            <p>
-              <strong>Géneros: </strong><span class="generos">{{ pelicula.generos.join(', ') }}</span>
-            </p>
-          </a>
-        </article>
+    <div *ngFor="let pelicula of peliculas" class="col-md-3 mb-4">
+      <a [routerLink]="['/detalle', pelicula.id_pelicula]" class="text-decoration-none text-reset">
+      <div class="card h-100">
+        <img [src]="pelicula.poster_url" class="card-img-top" [alt]="pelicula.nombre">
+        <div class="card-body">
+          <h5 class="card-title">{{ pelicula.nombre }}</h5>
+          <p class="card-text">
+            <strong>Géneros: </strong><span class="generos">{{ pelicula.generos.join(', ') }}</span>
+            <br>
+            <strong>Año:</strong> {{ pelicula.anio }}
+          </p>
+          <a [routerLink]="['/detalle', pelicula.id_pelicula]" class="btn btn-primary">Ver detalle</a>
+        </div>
       </div>
-    </ng-container>
+      </a>
+    </div>
   </div>
 </section>

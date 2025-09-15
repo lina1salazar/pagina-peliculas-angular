@@ -81,6 +81,7 @@ export class AdminUsuariosComponent implements OnInit {
 
   editarUsuario(usuario: Usuario): void {
     this.editUsuarioId = usuario.id_usuario ?? null;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     this.usuariosService.getUsuario(usuario.id_usuario!).subscribe(res => {
       const usuario = res as Usuario
       console.log('Usuario para editar:', usuario);

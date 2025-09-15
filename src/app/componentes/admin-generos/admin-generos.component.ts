@@ -67,6 +67,7 @@ export class AdminGenerosComponent implements OnInit {
 
   editarGenero(genero: Genero): void {
     this.editGeneroId = genero.id_genero ?? null;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     this.generoForm.setValue({ nombre: genero.nombre });
   }
 

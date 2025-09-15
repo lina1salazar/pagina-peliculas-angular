@@ -27,17 +27,17 @@ export class PeliculasComponent implements OnInit {
   constructor(private peliculasService: PeliculasService,private router: Router) {}
 
   ngOnInit(): void {
-    console.log('PeliculasComponent initialized');
-    this.cargarPeliculas();
+    this.cargarPeliculasIniciales();
 
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe(() => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
-}
+  }
 
-cargarPeliculas(): void {
+
+cargarPeliculasIniciales(): void {
   this.loading = true;
   this.error = null;
   this.peliculasService.getPeliculas().subscribe({
@@ -54,16 +54,24 @@ cargarPeliculas(): void {
   });
 }
 
-get peliculasFiltradas(): Pelicula[] {
-  return this.peliculas.filter(pelicula => {
-    const coincideGenero = this.filtroGenero === '' || pelicula.generos.includes(this.filtroGenero as any);
-    const coincideAnio = this.filtroAnio === '' || pelicula.anio.toString() === this.filtroAnio;
-    const coincideBusqueda = this.filtroBusqueda === '' ||
-      pelicula.nombre.toLowerCase().includes(this.filtroBusqueda.toLowerCase());
-    return coincideGenero && coincideAnio && coincideBusqueda;
+filtrarPeliculas(): void {
+  this.loading = true;
+  this.error = null;
+  this.peliculasService.getPeliculasFiltradas({
+    genero: this.filtroGenero,
+    anio: this.filtroAnio,
+    q: this.filtroBusqueda
+  }).subscribe({
+    next: (response) => {
+      this.peliculas = response.data;
+      this.loading = false;
+    },
+    error: (err) => {
+      this.error = err.message || 'Error al filtrar las películas.';
+      this.loading = false;
+    }
   });
 }
-
   private obtenerGenerosUnicos(peliculas: Pelicula[]): string[] {
     const generosSet = new Set<string>();
     peliculas.forEach(p => p.generos.forEach(g => generosSet.add(String(g))));

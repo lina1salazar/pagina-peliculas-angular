@@ -67,6 +67,7 @@ export class AdminActoresComponent implements OnInit {
 
   editarActor(actor: Actor): void {
     this.editActorId = actor.id_actor ?? null;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     this.actorForm.setValue({
       nombre: actor.nombre
     });

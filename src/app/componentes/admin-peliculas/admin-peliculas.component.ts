@@ -8,11 +8,12 @@ import { GenerosService } from '../../servicios/generos.service';
 import { ActoresService } from '../../servicios/actores.service';
 import { Genero } from '../../interfaces/generos';
 import { Actor } from '../../interfaces/actor';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-admin-peliculas',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './admin-peliculas.component.html',
   styleUrls: ['./admin-peliculas.component.scss']
 })
@@ -34,7 +35,12 @@ export class AdminPeliculasComponent implements OnInit {
   bannerUrl: string | null = null;
   
 
-  constructor(private peliculasService: PeliculasService, private generosService: GenerosService, private actoresService: ActoresService) {
+  constructor(
+      private peliculasService: PeliculasService,
+      private generosService: GenerosService,
+      private actoresService: ActoresService,
+      private router: RouterModule
+    ) {
     this.peliculaForm = new FormGroup({
       nombre: new FormControl('', Validators.required),
       slug: new FormControl('', Validators.required),
@@ -92,11 +98,12 @@ export class AdminPeliculasComponent implements OnInit {
     this.posterFile = null;
     this.bannerFile = null;
 
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
     this.peliculasService.getPelicula(id_pelicula).subscribe(res => {
       const pelicula = res as Pelicula;
       this.posterUrl = pelicula.poster_url || null;
       this.bannerUrl = pelicula.banner_url || null;
-      console.log(pelicula)
       this.peliculaForm.setValue({
         nombre: pelicula.nombre,
         slug: pelicula.slug,
