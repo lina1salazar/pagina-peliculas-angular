@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NgFor, NgIf } from '@angular/common';
+import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { UsuariosService } from '../../servicios/usuarios.service';
 import { Usuario, UsuarioCrear } from '../../interfaces/usuarios';
@@ -7,7 +7,7 @@ import { Usuario, UsuarioCrear } from '../../interfaces/usuarios';
 @Component({
   selector: 'app-admin-usuarios',
   standalone: true,
-  imports: [NgFor, NgIf, ReactiveFormsModule],
+  imports: [NgFor, NgIf, ReactiveFormsModule, CommonModule],
   templateUrl: './admin-usuarios.component.html',
   styleUrls: ['./admin-usuarios.component.scss']
 })
@@ -22,7 +22,7 @@ export class AdminUsuariosComponent implements OnInit {
     this.usuarioForm = new FormGroup({
       nombre: new FormControl('', [Validators.required, Validators.minLength(5)]),
       correo: new FormControl('', [Validators.required, Validators.email]),
-      rol: new FormControl('user'),
+      rol: new FormControl('usuario', [Validators.required]),
       contrasena: new FormControl('', [Validators.minLength(8)])
     });
   }
@@ -39,7 +39,17 @@ export class AdminUsuariosComponent implements OnInit {
   }
 
   guardarUsuario(): void {
+
+    const contrasenaControl = this.usuarioForm.get('contrasena');
+    if (!this.editUsuarioId) {
+      contrasenaControl?.setValidators([Validators.required, Validators.minLength(8)]);
+    } else {
+      contrasenaControl?.setValidators([Validators.minLength(8)]);
+    }
+
+    contrasenaControl?.updateValueAndValidity();
     if (this.usuarioForm.invalid) {
+      console.log('Formulario inválido:', this.usuarioForm);
       this.usuarioForm.markAllAsTouched();
       return;
     }
@@ -53,6 +63,7 @@ export class AdminUsuariosComponent implements OnInit {
           this.exitoMessage = 'Usuario actualizado';
           this.usuarioForm.reset({ rol: 'user' });
           this.editUsuarioId = null;
+          this.errorMessage = '';
         },
         error: () => this.errorMessage = 'Error al actualizar usuario'
       });
@@ -70,11 +81,15 @@ export class AdminUsuariosComponent implements OnInit {
 
   editarUsuario(usuario: Usuario): void {
     this.editUsuarioId = usuario.id_usuario ?? null;
-    this.usuarioForm.setValue({
-      nombre: usuario.nombre,
-      correo: usuario.correo,
-      rol: usuario.rol,
-      contrasena: ''
+    this.usuariosService.getUsuario(usuario.id_usuario!).subscribe(res => {
+      const usuario = res as Usuario
+      console.log('Usuario para editar:', usuario);
+      this.usuarioForm.setValue({
+        nombre: usuario.nombre,
+        correo: usuario.correo,
+        rol: usuario.rol,
+        contrasena: ''
+      });
     });
   }
 
