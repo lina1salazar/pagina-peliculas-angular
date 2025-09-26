@@ -27,7 +27,25 @@
               <a routerLink="/admin-actores" class="btn btn-outline-light">Actores</a>
               <a routerLink="/admin-generos" class="btn btn-outline-light">Géneros</a>
             </ng-container>
-            <button class="btn btn-danger" (click)="logout()">Cerrar sesión</button>
+
+            <!-- Menú desplegable -->
+            <div class="dropdown">
+              <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenuButton"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                ⚙️
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                <li>
+                  <a class="dropdown-item" routerLink="/perfil">Perfil</a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider" />
+                </li>
+                <li>
+                  <button class="dropdown-item text-danger" (click)="logout()">Cerrar sesión</button>
+                </li>
+              </ul>
+            </div>
           </ng-template>
         </div>
       </div>

@@ -4,12 +4,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Usuario, UsuarioCrear } from '../interfaces/usuarios';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsuariosService {
-  private apiUrl = 'http://localhost:5000/api/usuarios';
+  private apiUrl = '{environment.apiUrl}/usuarios';
 
   constructor(private http: HttpClient) {}
 
@@ -44,13 +45,13 @@ export class UsuariosService {
   }
 
   getPerfil(): Observable<Usuario> {
-    return this.http.get<Usuario>(`${this.apiUrl}/me`).pipe(
+    return this.http.get<Usuario>(`${environment.apiUrl}/me`).pipe(
       catchError(err => throwError(() => err))
     );
   }
 
   actualizarPerfil(usuario: Partial<Usuario>): Observable<Usuario> {
-    return this.http.put<Usuario>(`${this.apiUrl}/me`, usuario).pipe(
+    return this.http.patch<Usuario>(`${environment.apiUrl}/me`, usuario).pipe(
       catchError(err => throwError(() => err))
     );
   }

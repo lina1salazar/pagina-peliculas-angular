@@ -1,0 +1,45 @@
+<div class="perfil-container">
+  <h2>👤 Mi Perfil</h2>
+
+  <div *ngIf="cargando">⏳ Cargando...</div>
+
+  <div *ngIf="error" class="error">{{ error }}</div>
+  <div *ngIf="mensaje" class="success">{{ mensaje }}</div>
+
+  <form *ngIf="perfilForm" [formGroup]="perfilForm" (ngSubmit)="guardar()">
+    <div class="campo">
+      <label for="nombre">Nombre:</label>
+      <input
+        id="nombre"
+        type="text"
+        formControlName="nombre"
+        [class.invalido]="perfilForm.get('nombre')?.touched && perfilForm.get('nombre')?.invalid"
+      />
+      <div class="feedback" *ngIf="perfilForm.get('nombre')?.touched && perfilForm.get('nombre')?.invalid">
+        ⚠️ El nombre es obligatorio
+      </div>
+    </div>
+
+    <div class="campo">
+      <label for="correo">Correo:</label>
+      <input
+        id="correo"
+        type="email"
+        formControlName="correo"
+        [class.invalido]="perfilForm.get('correo')?.touched && perfilForm.get('correo')?.invalid"
+      />
+      <div class="feedback" *ngIf="perfilForm.get('correo')?.touched && perfilForm.get('correo')?.invalid">
+        ⚠️ Debes ingresar un correo válido
+      </div>
+    </div>
+
+    <div class="campo">
+      <label>Rol:</label>
+      <span class="rol">{{ usuario?.rol }}</span>
+    </div>
+
+    <button type="submit" [disabled]="cargando || perfilForm.invalid">
+      {{ cargando ? '💾 Guardando...' : '💾 Guardar cambios' }}
+    </button>
+  </form>
+</div>
