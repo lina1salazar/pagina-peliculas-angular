@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FavoritosService } from '../../servicios/favoritos.service';
+import { AuthService } from '../../servicios/auth.service';
 import { take } from 'rxjs/operators';
 
 @Component({
@@ -14,11 +15,17 @@ export class BotonFavoritasComponent implements OnInit {
   @Input() peliculaId!: number;
   enFavoritos = false;
   cargando = false;
+  usuarioAutenticado = false;
 
-  constructor(private favoritosService: FavoritosService) {}
+  constructor(
+    private favoritosService: FavoritosService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
-    if (this.peliculaId) {
+    this.usuarioAutenticado = this.authService.isAuthenticated();
+
+    if (this.peliculaId && this.usuarioAutenticado) {
       this.verificarSiEsFavorito();
     }
   }
@@ -35,6 +42,11 @@ export class BotonFavoritasComponent implements OnInit {
   }
 
   toggleFavorito(): void {
+    if (!this.usuarioAutenticado) {
+      alert('Debes iniciar sesión para agregar o quitar favoritos');
+      return;
+    }
+
     if (!this.peliculaId || this.cargando) return;
 
     this.cargando = true;
