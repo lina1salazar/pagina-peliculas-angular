@@ -1,0 +1,37 @@
+<div class="favoritas-container">
+  <!-- Botón para agregar la película actual -->
+  <div *ngIf="pelicula">
+    <button class="btn-agregar" (click)="agregarAFavoritos()">
+      ❤️ Agregar "{{ pelicula.nombre }}" a Favoritos
+    </button>
+  </div>
+
+  <!-- Sección de favoritos siempre visible -->
+  <h2>🎬 Mis Favoritos</h2>
+
+  <!-- Loader -->
+  <div *ngIf="cargando" class="mensaje cargando">Cargando favoritos...</div>
+
+  <!-- Error -->
+  <div *ngIf="error" class="mensaje error">{{ error }}</div>
+
+  <!-- Lista vacía -->
+  <div *ngIf="favoritos.length === 0 && !cargando && !error" class="mensaje vacio">
+    No tienes películas en favoritos.
+  </div>
+
+  <!-- Lista de favoritos -->
+  <div class="lista-favoritos" *ngIf="favoritos.length > 0">
+    <div class="favorito-card" *ngFor="let pelicula of favoritos">
+      <img [src]="pelicula.poster_url" [alt]="pelicula.nombre" class="poster" />
+      <div class="info">
+        <h3>{{ pelicula.nombre }}</h3>
+        <p *ngIf="pelicula.anio">Año: {{ pelicula.anio }}</p>
+        <p *ngIf="pelicula.puntuacion">⭐ {{ pelicula.puntuacion }}</p>
+        <button class="btn-eliminar" (click)="eliminarDeFavoritos(pelicula)">
+          ❌ Eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

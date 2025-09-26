@@ -17,6 +17,9 @@
           </ng-container>
 
           <ng-template #loggedIn>
+
+            <a routerLink="/favoritas" class="btn btn-warning">⭐ Favoritos</a>
+
             <ng-container *ngIf="authService.getUsuario()?.rol === 'admin'">
               <a routerLink="/admin/dashboard" class="btn btn-outline-light">Dashboard</a>
               <a routerLink="/admin/peliculas" class="btn btn-outline-light">Películas</a>

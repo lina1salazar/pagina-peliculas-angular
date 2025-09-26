@@ -10,6 +10,7 @@ import { AdminUsuariosComponent } from './componentes/admin-usuarios/admin-usuar
 import { AdminGuard } from '../app/servicios/adminGuard';
 import { AdminActoresComponent } from './componentes/admin-actores/admin-actores.component';
 import { AdminGenerosComponent } from './componentes/admin-generos/admin-generos.component';
+import { FavoritasComponent } from './componentes/favoritas/favoritas.component';
 
 
 
@@ -24,6 +25,7 @@ export const routes: Routes = [
     { path: 'admin/usuarios', component: AdminUsuariosComponent, canActivate: [AdminGuard] },
     { path: 'admin-actores', component: AdminActoresComponent, canActivate: [AdminGuard] },
     { path: 'admin-generos', component: AdminGenerosComponent, canActivate: [AdminGuard] },
+    { path: 'favoritas', component: FavoritasComponent },
 
     { path: '**', redirectTo: '' }
 

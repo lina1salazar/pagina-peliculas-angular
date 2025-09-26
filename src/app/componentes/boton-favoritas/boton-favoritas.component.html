@@ -1,0 +1,9 @@
+<button (click)="toggleFavorito()"
+        [disabled]="cargando"
+        [ngClass]="{ 'en-favoritos': enFavoritos, 'no-favorito': !enFavoritos }"
+        class="btn-favorito">
+  <ng-container *ngIf="!cargando">
+    {{ enFavoritos ? '❌ Quitar de favoritos' : '❤️ Agregar a favoritos' }}
+  </ng-container>
+  <ng-container *ngIf="cargando">⏳...</ng-container>
+</button>

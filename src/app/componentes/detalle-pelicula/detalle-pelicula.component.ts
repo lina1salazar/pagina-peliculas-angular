@@ -6,12 +6,14 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Pelicula } from '../../interfaces/pelicula';
+import { BotonFavoritasComponent } from "../boton-favoritas/boton-favoritas.component";
+
 
 
 @Component({
   selector: 'app-detalle-pelicula',
   templateUrl: './detalle-pelicula.component.html',
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, BotonFavoritasComponent],
   styleUrls: ['./detalle-pelicula.component.scss']
 })
 export class DetallePeliculaComponent implements OnInit {
