@@ -23,6 +23,13 @@ export class PeliculasComponent implements OnInit {
   loading: boolean = false;
   error : string | null = null;
   
+  paginaActual: number = 1;
+  itemsPorPagina: number = 12;
+  totalPaginas: number = 1;
+
+  ordenCampo: string = 'anio';
+  ordenDir: string = 'asc';
+  
 
   constructor(private peliculasService: PeliculasService,private router: Router) {}
 
@@ -60,10 +67,15 @@ filtrarPeliculas(): void {
   this.peliculasService.getPeliculasFiltradas({
     genero: this.filtroGenero,
     anio: this.filtroAnio,
-    q: this.filtroBusqueda
+    q: this.filtroBusqueda,
+    sort: this.ordenCampo,
+    order: this.ordenDir,
+    page: String(this.paginaActual),
+    per_page: String(this.itemsPorPagina)
   }).subscribe({
     next: (response) => {
       this.peliculas = response.data;
+      this.totalPaginas = response.total_pages ?? 1;
       this.loading = false;
     },
     error: (err) => {
@@ -72,6 +84,21 @@ filtrarPeliculas(): void {
     }
   });
 }
+  paginaAnterior(): void {
+    if (this.paginaActual > 1) {
+      this.paginaActual--;
+      this.filtrarPeliculas();
+    }
+  }
+
+  paginaSiguiente(): void {
+    if (this.paginaActual < this.totalPaginas) {
+      this.paginaActual++;
+      this.filtrarPeliculas();
+    }
+  }
+
+
   private obtenerGenerosUnicos(peliculas: Pelicula[]): string[] {
     const generosSet = new Set<string>();
     peliculas.forEach(p => p.generos.forEach(g => generosSet.add(String(g))));

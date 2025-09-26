@@ -29,11 +29,17 @@ export class PeliculasService {
     );
   }
 
-  getPeliculasFiltradas(params: { genero?: string; anio?: string; q?: string } = {}): Observable<ApiResponse<Pelicula[]>> {
+  getPeliculasFiltradas(params: { genero?: string; anio?: string; q?: string; sort?: string; order?: string; page?: string; per_page?: string } = {}): Observable<ApiResponse<Pelicula[]>> {
     const queryParams: string[] = [];
     if (params.genero) queryParams.push(`genero=${encodeURIComponent(params.genero)}`);
     if (params.anio) queryParams.push(`anio=${encodeURIComponent(params.anio)}`);
     if (params.q) queryParams.push(`q=${encodeURIComponent(params.q)}`);
+    if (params.sort) queryParams.push(`sort=${encodeURIComponent(params.sort)}`);
+    if (params.order) queryParams.push(`order=${encodeURIComponent(params.order)}`);
+    if (params.page) queryParams.push(`page=${params.page}`);
+    if (params.per_page) queryParams.push(`per_page=${params.per_page}`);
+
+
     const url = queryParams.length > 0 ? `${this.apiUrl}?${queryParams.join('&')}` : this.apiUrl;
 
     return this.http.get<Pelicula[]>(url).pipe(
