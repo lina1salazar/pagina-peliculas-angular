@@ -30,6 +30,30 @@
     <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
   </div>
 
+  <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
+
+    <div class="d-flex gap-2 align-items-center mb-2">
+    <label for="ordenCampo" class="form-label m-0">Ordenar por:</label>
+    <select id="ordenCampo" class="form-select" [(ngModel)]="ordenCampo" name="ordenCampo" (change)="filtrarPeliculas()">
+      <option value="anio">Año</option>
+      <option value="nombre">Nombre</option>
+      <option value="puntuacion">Puntuación</option>
+    </select>
+
+    <select id="ordenDir" class="form-select" [(ngModel)]="ordenDir" name="ordenDir" (change)="filtrarPeliculas()">
+      <option value="asc">Ascendente</option>
+      <option value="desc">Descendente</option>
+    </select>
+  </div>
+
+  <div class="d-flex gap-2 align-items-center mb-2">
+    <button class="btn btn-outline-primary" [disabled]="paginaActual === 1" (click)="paginaAnterior()">« Anterior</button>
+    <span>Página {{ paginaActual }} de {{ totalPaginas }}</span>
+    <button class="btn btn-outline-primary" [disabled]="paginaActual === totalPaginas" (click)="paginaSiguiente()">Siguiente »</button>
+  </div>
+</div>
+
+
   <div class="row">
     <div *ngFor="let pelicula of peliculas" class="col-md-3 mb-4">
       <a [routerLink]="['/detalle', pelicula.id_pelicula]" class="text-decoration-none text-reset">
