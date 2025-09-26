@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { Comentario } from '../interfaces/comentario';
 import { AuthService } from './auth.service';
 
@@ -9,7 +9,7 @@ import { AuthService } from './auth.service';
   providedIn: 'root'
 })
 export class ComentariosService {
-  private apiUrl = 'http://localhost:5000/api/peliculas';
+  private apiUrl = 'http://localhost:5000/api';
 
   constructor(
     private http: HttpClient,
@@ -18,7 +18,7 @@ export class ComentariosService {
 
   // Obtener todos los comentarios de una película
   getComentarios(idPelicula: number): Observable<Comentario[]> {
-    return this.http.get<Comentario[]>(`${this.apiUrl}/${idPelicula}/comentarios`)
+    return this.http.get<Comentario[]>(`${this.apiUrl}/peliculas/${idPelicula}/comentarios`)
       .pipe(
         catchError(err => {
           console.error('Error al obtener comentarios', err);
@@ -27,18 +27,11 @@ export class ComentariosService {
       );
   }
 
+  // Agregar un nuevo comentario
   agregarComentario(comentario: Partial<Comentario>, idPelicula: number): Observable<Comentario> {
-    const token = this.authService.getAccessToken();
-    if (!token) {
-      return throwError(() => new Error('No autenticado'));
-    }
-
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-
+    const headers = this.getAuthHeaders();
     return this.http.post<Comentario>(
-      `${this.apiUrl}/${idPelicula}/comentarios`,
+      `${this.apiUrl}/peliculas/${idPelicula}/comentarios`,
       comentario,
       { headers }
     ).pipe(
@@ -47,5 +40,45 @@ export class ComentariosService {
         return throwError(() => err);
       })
     );
+  }
+
+  // Editar un comentario existente
+  actualizarComentario(idComentario: number, comentario: Partial<Comentario>): Observable<Comentario> {
+    const headers = this.getAuthHeaders();
+    return this.http.put<Comentario>(
+      `${this.apiUrl}/comentarios/${idComentario}`,
+      comentario,
+      { headers }
+    ).pipe(
+      catchError(err => {
+        console.error('Error al actualizar comentario', err);
+        return throwError(() => err);
+      })
+    );
+  }
+
+  // Eliminar un comentario
+  eliminarComentario(idComentario: number): Observable<void> {
+    const headers = this.getAuthHeaders();
+    return this.http.delete<void>(
+      `${this.apiUrl}/comentarios/${idComentario}`,
+      { headers }
+    ).pipe(
+      catchError(err => {
+        console.error('Error al eliminar comentario', err);
+        return throwError(() => err);
+      })
+    );
+  }
+
+  // Helper para headers con token
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.authService.getAccessToken();
+    if (!token) {
+      throw new Error('No autenticado');
+    }
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
   }
 }

@@ -60,13 +60,13 @@ export class AuthService {
     return localStorage.getItem('access_token');
   }
 
-  getUsuario(): { id: number; correo: string; rol: string } | null {
+  getUsuario(): { id: number; correo?: string; rol: string } | null {
   const token = this.getAccessToken();
   if (!token) return null;
 
   try {
     const payload = JSON.parse(atob(token.split('.')[1]));
-    return { id: payload.id, correo: payload.correo, rol: payload.rol };
+    return { id: payload.id_usuario, correo: payload.correo, rol: payload.rol };
   } catch (error) {
     console.error('Error al decodificar token', error);
     return null;

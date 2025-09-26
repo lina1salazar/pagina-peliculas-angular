@@ -4,16 +4,38 @@
     <h3 class="m-0">Comentarios</h3>
   </div>
 
-  <div class="my-3 p-3 bg-body rounded" id="comentarios-container">
-    <app-comentario 
-      *ngFor="let c of comentarios"
-      [calificacion]="c.calificacion"
-      [contenido]="c.contenido"
-      [fecha_comentario]="c.fecha_comentario ?? ''"
-      [usuario]="c.usuario ?? ''">
-    </app-comentario>
+  <div class="my-3">
+    <div *ngFor="let c of comentarios | slice:0" class="card mb-3 shadow-sm">
+      <div class="card-body">
+        <div class="d-flex align-items-center mb-2">
+          <h6 class="card-subtitle mb-0 fw-bold">{{ c.usuario }}</h6>
+          <span *ngIf="c.id_usuario === usuarioActualId" class="badge bg-primary ms-2">Tú</span>
+          <span *ngIf="c.id_usuario !== usuarioActualId && c.id_usuario != null && usuarioActualRol === 'admin'" class="badge bg-danger ms-2">Admin</span>
+          <small class="text-muted ms-auto">{{ c.fecha_comentario | date:'short' }}</small>
+        </div>
+
+        <p class="card-text mb-1">{{ c.contenido }}</p>
+
+        <div class="mb-2">
+          <ng-container *ngFor="let star of [1,2,3,4,5,6,7,8,9,10]">
+            <i class="bi" [ngClass]="star <= c.calificacion ? 'bi-star-fill text-warning' : 'bi-star text-muted'"></i>
+          </ng-container>
+        </div>
+
+        <!-- Botones de acción (autor o admin) -->
+        <div *ngIf="usuarioAutenticado && (c.id_usuario === usuarioActualId || usuarioActualRol === 'admin')">
+          <button class="btn btn-sm btn-outline-secondary me-2" (click)="editarComentario(c)">
+            <i class="bi bi-pencil"></i> Editar
+          </button>
+          <button class="btn btn-sm btn-outline-danger" (click)="eliminarComentario(c.id_comentario!)">
+            <i class="bi bi-trash"></i> Eliminar
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 
+  <!-- Formulario de comentario -->
   <form id="form-comentario" [formGroup]="comentarioForm" (ngSubmit)="agregarComentario()" class="p-3">
     <div *ngIf="!usuarioAutenticado" class="alert alert-warning">
       Debes iniciar sesión para agregar un comentario.
@@ -35,6 +57,7 @@
         El comentario es requerido y debe tener al menos 5 caracteres.
       </div>
     </div>
+
     <div class="mb-3">
       <label for="calificacion" class="form-label">Calificación (1-10)</label>
       <input type="number"
@@ -50,6 +73,10 @@
         La calificación debe estar entre 1 y 10.
       </div>
     </div>
-    <button type="submit" class="btn btn-primary" [disabled]="!usuarioAutenticado">Enviar</button>
+
+    <button type="submit" class="btn btn-primary" [disabled]="!usuarioAutenticado">
+      {{ comentarioEditando ? 'Actualizar' : 'Enviar' }}
+    </button>
+    <button *ngIf="comentarioEditando" type="button" class="btn btn-secondary ms-2" (click)="cancelarEdicion()">Cancelar</button>
   </form>
 </section>
