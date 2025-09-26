@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../servicios/auth.service';
 import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -42,9 +43,9 @@ export class LoginComponent {
         this.loading = false;
         this.router.navigate(['/']);
       },
-      error: (err: Error) => {
+      error: (err: HttpErrorResponse) => {
         this.loading = false;
-        this.errorMessage = err?.message || 'Error al iniciar sesión';
+        this.errorMessage = err.error?.msg || 'Error al iniciar sesión';
       }
     });
   }
