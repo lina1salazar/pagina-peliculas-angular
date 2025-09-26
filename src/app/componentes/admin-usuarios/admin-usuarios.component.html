@@ -28,7 +28,7 @@
       <select class="form-control"
               [ngClass]="{'is-invalid': usuarioForm.get('rol')?.invalid && usuarioForm.get('rol')?.touched}"
               formControlName="rol">
-        <option value="usuario">Usuario</option>
+        <option value="user">Usuario</option>
         <option value="admin">Administrador</option>
       </select>
       <div *ngIf="usuarioForm.get('rol')?.invalid && usuarioForm.get('rol')?.touched" class="invalid-feedback">
