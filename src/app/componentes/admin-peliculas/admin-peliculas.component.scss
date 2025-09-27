@@ -79,3 +79,38 @@
   background-color: #6c757d;
   border-color: #6c757d;
 }
+
+.d-flex-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1.5rem 0;
+
+  button {
+    background-color: #ffffff;
+    color: #1a73e8;
+    border: 2px solid #1a73e8;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+
+    &:hover:not(:disabled) {
+      background-color: #1a73e8;
+      color: #ffffff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    &:disabled {
+      background-color: #cccccc;
+      color: #666666;
+      border-color: #999999;
+      cursor: not-allowed;
+    }
+  }
+
+  span {
+    color: #ffffff;
+    font-weight: 500;
+  }
+}

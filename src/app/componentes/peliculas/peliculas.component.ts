@@ -11,7 +11,8 @@ import { Pelicula } from '../../interfaces/pelicula';
   selector: 'app-peliculas',
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule],
-  templateUrl: './peliculas.component.html'
+  templateUrl: './peliculas.component.html',
+  styleUrls: ['./peliculas.component.scss']
 })
 export class PeliculasComponent implements OnInit {
   peliculas: Pelicula[] = [];

@@ -1,0 +1,107 @@
+/* peliculas.component.scss */
+
+.peliculas-container {
+  background-color: #0b2545; // azul oscuro de fondo
+  padding: 2rem;
+  border-radius: 12px;
+  color: #ffffff;
+
+  h2 {
+    color: #ffc107; // título en dorado
+  }
+
+  .form-label {
+    color: #ffffff;
+    font-weight: 500;
+  }
+
+  .form-control,
+  .form-select {
+    background-color: #1a3760;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+
+    &:focus {
+      background-color: #1a3760;
+      color: #ffffff;
+      border-color: #ffc107;
+      box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
+    }
+  }
+
+  .d-flex-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+
+    button {
+      background-color: #ffc107;
+      color: #0b2545;
+      border: 2px solid #ffc107;
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+
+      &:hover:not(:disabled) {
+        background-color: #e0a800;
+        border-color: #e0a800;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      }
+
+      &:disabled {
+        background-color: #6c757d;
+        color: #e9ecef;
+        border-color: #6c757d;
+        cursor: not-allowed;
+      }
+    }
+
+    span {
+      color: #ffffff;
+      font-weight: 500;
+    }
+  }
+
+  .card {
+    background-color: #1a3760;
+    color: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .card-title {
+      color: #ffc107;
+      font-weight: 600;
+    }
+
+    .card-text {
+      color: #e0e0e0;
+    }
+
+    .btn-primary {
+      background-color: #ffc107;
+      border-color: #ffc107;
+      color: #0b2545;
+      font-weight: 600;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background-color: #e0a800;
+        border-color: #e0a800;
+        color: #0b2545;
+      }
+    }
+  }
+
+  .generos {
+    color: #ffd966;
+  }
+}
