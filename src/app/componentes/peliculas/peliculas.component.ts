@@ -26,6 +26,7 @@ export class PeliculasComponent implements OnInit {
   paginaActual: number = 1;
   itemsPorPagina: number = 12;
   totalPaginas: number = 1;
+  totalItems: number = 0;
 
   ordenCampo: string = 'anio';
   ordenDir: string = 'asc';
@@ -34,7 +35,7 @@ export class PeliculasComponent implements OnInit {
   constructor(private peliculasService: PeliculasService,private router: Router) {}
 
   ngOnInit(): void {
-    this.cargarPeliculasIniciales();
+    this.filtrarPeliculas();
 
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
@@ -42,24 +43,6 @@ export class PeliculasComponent implements OnInit {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
-
-
-cargarPeliculasIniciales(): void {
-  this.loading = true;
-  this.error = null;
-  this.peliculasService.getPeliculas().subscribe({
-    next: (response) => {
-      this.peliculas = response.data;
-      this.generos = this.obtenerGenerosUnicos(this.peliculas);
-      this.anios = this.obtenerAniosUnicos(this.peliculas);
-      this.loading = false;
-    },
-    error: (err) => {
-      this.error = err.message || 'Error al cargar las películas.';
-      this.loading = false;
-    }
-  });
-}
 
 filtrarPeliculas(): void {
   this.loading = true;
@@ -75,7 +58,11 @@ filtrarPeliculas(): void {
   }).subscribe({
     next: (response) => {
       this.peliculas = response.data;
+      this.totalItems = response.total_items ?? 0;
+      this.paginaActual = response.page ?? 1;
       this.totalPaginas = response.total_pages ?? 1;
+      this.generos = this.obtenerGenerosUnicos(this.peliculas);
+      this.anios = this.obtenerAniosUnicos(this.peliculas);
       this.loading = false;
     },
     error: (err) => {

@@ -22,6 +22,11 @@ export class AdminPeliculasComponent implements OnInit {
   generos: Genero[] = [];
   actores: Actor[] = [];
   peliculaForm: FormGroup;
+  paginaActual: number = 1;
+  totalPaginas: number = 0;
+  totalItems: number = 0;
+  perPage: number = 10;
+  loading: boolean = false;
   editing: boolean = false;
   currentId: number | null = null;
 
@@ -61,11 +66,36 @@ export class AdminPeliculasComponent implements OnInit {
     this.cargarActores();
   }
 
-  cargarPeliculas(): void {
-    this.peliculasService.getPeliculas().subscribe(res => {
-      this.peliculas = res.data;
+  cargarPeliculas(page: number = 1): void {
+    this.loading = true;
+    this.peliculasService.getPeliculas(page, this.perPage).subscribe({
+      next: (res) => {
+        console.log('Respuesta getPeliculas (admin):', res);
+        this.peliculas = res.data;
+        this.paginaActual = res.page ?? 1;
+        this.totalPaginas = res.total_pages ?? 1;
+        this.totalItems = res.total_items ?? 0;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Error al cargar películas (admin):', err);
+        this.loading = false;
+      }
     });
   }
+
+    paginaAnterior(): void {
+    if (this.paginaActual > 1) {
+      this.cargarPeliculas(this.paginaActual - 1);
+    }
+  }
+
+  paginaSiguiente(): void {
+    if (this.paginaActual < this.totalPaginas) {
+      this.cargarPeliculas(this.paginaActual + 1);
+    }
+  }
+
 
   cargarGeneros(): void {
     this.generosService.getGeneros().subscribe(res => {
@@ -174,7 +204,7 @@ export class AdminPeliculasComponent implements OnInit {
 
     request$.subscribe({
       next: () => {
-        this.cargarPeliculas();
+        this.cargarPeliculas(this.paginaActual);
         this.cancelar();
       },
       error: (err) =>{
@@ -195,5 +225,6 @@ export class AdminPeliculasComponent implements OnInit {
     if (!confirm('¿Seguro que quieres eliminar esta película?')) return;
 
     this.peliculasService.eliminarPelicula(id).subscribe(() => this.cargarPeliculas());
-  }
+  }  
 }
+

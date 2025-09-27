@@ -95,4 +95,16 @@
       </tbody>
     </table>
   </div>
+<div class="d-flex justify-content-between align-items-center my-3">
+  <button class="btn btn-outline-primary" (click)="paginaAnterior()" [disabled]="paginaActual === 1">
+    « Anterior
+  </button>
+
+  <span>Página {{ paginaActual }} de {{ totalPaginas }} ({{ totalItems }} películas)</span>
+
+  <button class="btn btn-outline-primary" (click)="paginaSiguiente()" [disabled]="paginaActual === totalPaginas">
+    Siguiente »
+  </button>
+</div>
+
 </section>

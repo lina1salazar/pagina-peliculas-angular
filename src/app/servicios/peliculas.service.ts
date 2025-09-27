@@ -15,9 +15,19 @@ export class PeliculasService {
   constructor(private http: HttpClient) { }
 
   // Obtener todas las películas
-  getPeliculas(): Observable<ApiResponse<Pelicula[]>> {
-    return this.http.get<Pelicula[]>(this.apiUrl).pipe(
-      map((data) => ({ data } as ApiResponse<Pelicula[]>)),
+  getPeliculas(page: number = 1, per_page: number = 10): Observable<ApiResponse<Pelicula[]>> {
+    const url = `${this.apiUrl}?page=${page}&per_page=${per_page}`;
+    return this.http.get<any>(url).pipe(
+      map((resp) => {
+        return {
+          data: resp.peliculas,
+          message: 'ok',
+          page: resp.current_page,
+          per_page: resp.per_page,
+          total_pages: resp.pages,
+          total_items: resp.total
+        } as ApiResponse<Pelicula[]>;
+      }),
       catchError(this.handleError)
     );
   }
@@ -39,11 +49,22 @@ export class PeliculasService {
     if (params.page) queryParams.push(`page=${params.page}`);
     if (params.per_page) queryParams.push(`per_page=${params.per_page}`);
 
+    if (!params.page) queryParams.push(`page=1`);
+    if (!params.per_page) queryParams.push(`per_page=10`);
 
-    const url = queryParams.length > 0 ? `${this.apiUrl}?${queryParams.join('&')}` : this.apiUrl;
+       const url = `${this.apiUrl}?${queryParams.join('&')}`;
 
-    return this.http.get<Pelicula[]>(url).pipe(
-      map((data) => ({ data } as ApiResponse<Pelicula[]>)),
+    return this.http.get<any>(url).pipe(
+      map((resp) => {
+        return {
+          data: resp.peliculas,
+          message: 'ok',
+          page: resp.current_page,
+          per_page: resp.per_page,
+          total_pages: resp.pages,
+          total_items: resp.total
+        } as ApiResponse<Pelicula[]>;
+      }),
       catchError(this.handleError)
     );
   }
@@ -71,7 +92,8 @@ export class PeliculasService {
 
   // Películas destacadas
   getPeliculasDestacadas(): Observable<Pelicula[]> {
-    return this.http.get<Pelicula[]>(`${this.apiUrl}?destacadas=true`).pipe(
+    return this.http.get<any>(`${this.apiUrl}?destacadas=true`).pipe(
+      map((resp) => resp.peliculas as Pelicula[]),
       catchError(this.handleError)
     );
   }
